@@ -20,6 +20,10 @@ OUTDIR = build
 # TIVAWARE_PATH: path to tivaware folder
 TIVAWARE_PATH = /home/eric/code/tivaware
 
+LIBC = ${shell ${CC} ${CFLAGS} -print-file-name=libc.a}
+LIBM = ${shell ${CC} ${CFLAGS} -print-file-name=libm.a}
+LIBGCC = ${shell ${CC} ${CFLAGS} -print-file-name=libgcc.a}
+
 # LD_SCRIPT: linker script
 LD_SCRIPT = $(MCU).ld
 
@@ -28,7 +32,7 @@ CFLAGS = -g -mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp
 CFLAGS +=-Os -ffunction-sections -fdata-sections -MD -std=c99 -Wall
 CFLAGS += -pedantic -DPART_$(MCU) -c -I$(TIVAWARE_PATH)
 CFLAGS += -DTARGET_IS_BLIZZARD_RA1
-LDFLAGS = -T $(LD_SCRIPT) --entry ResetISR --gc-sections
+LDFLAGS = -T $(LD_SCRIPT) --entry ResetISR --gc-sections $(LIBM) $(LIBC) $(LIBGCC)
 
 #######################################
 # end of user configuration
